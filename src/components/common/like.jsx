@@ -5,7 +5,7 @@ const Like = props => {
   return (
     <i
       onClick={props.clickLike}
-      className="fa fa-heart-o"
+      className={props.movie.liked ? "fa fa-heart" : "fa fa-heart-o"}
       style={{ cursor: "pointer" }}
     />
   );

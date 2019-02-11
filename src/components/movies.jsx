@@ -4,11 +4,15 @@ import { getMovies } from "../services/fakeMovieService";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
 import Like from "../components/common/like";
+import Pagination from "./common/pagination";
+import { getRecordsOnPage } from "../util/paginate";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    tableHeaders: ["Title", "Genre", "No. In Stock", "Daily Rental Rate", " "]
+    tableHeaders: ["Title", "Genre", "No. In Stock", "Daily Rental Rate", " "],
+    pageSize: 4,
+    currentPage: 1
   };
 
   handleDeleteMovie = movie => {
@@ -17,31 +21,49 @@ class Movies extends Component {
   };
 
   handleClickLike = movie => {
-    console.log("Click Event Fired");
-    console.log(movie);
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
+  };
+
+  handleOnPageClick = page => {
+    this.setState({ currentPage: page });
   };
 
   render() {
-    const getHeader = (
+    const {
+      movies: allMovies,
+      currentPage,
+      pageSize,
+      tableHeaders
+    } = this.state;
+
+    const movies = getRecordsOnPage(allMovies, currentPage, pageSize);
+
+    const getTableHeader = (
       <thead>
         <tr>
-          {this.state.tableHeaders.map(tableHeader => (
+          {tableHeaders.map(tableHeader => (
             <th key={tableHeader}>{tableHeader}</th>
           ))}
         </tr>
       </thead>
     );
 
-    const getBody = (
+    const getTableBody = (
       <tbody>
-        {this.state.movies.map(movie => (
+        {movies.map(movie => (
           <tr key={movie._id}>
             <td>{movie.title}</td>
             <td>{movie.genre.name}</td>
             <td>{movie.numberInStock}</td>
             <td>{movie.dailyRentalRate}</td>
             <td>
-              <Like clickLike={() => this.handleClickLike(movie)} />
+              <Like
+                movie={movie}
+                clickLike={() => this.handleClickLike(movie)}
+              />
             </td>
             <td>
               <button
@@ -59,14 +81,20 @@ class Movies extends Component {
     return (
       <React.Fragment>
         <span>
-          {this.state.movies.length === 0
+          {allMovies.length === 0
             ? "No movies in the database"
-            : this.state.movies.length + " movies in the database"}
+            : allMovies.length + " movie/s in the database"}
         </span>
         <table className="table table-hover">
-          {getHeader}
-          {getBody}
+          {getTableHeader}
+          {getTableBody}
         </table>
+        <Pagination
+          totalNoOfRecords={allMovies.length}
+          pageSize={pageSize}
+          onPageClick={this.handleOnPageClick}
+          currentPage={this.state.currentPage}
+        />
       </React.Fragment>
     );
   }
