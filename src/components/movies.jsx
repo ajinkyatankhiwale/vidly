@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 
 import { getMovies } from "../services/fakeMovieService";
+import { getGenres } from "../services/fakeGenreService";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
 import Like from "../components/common/like";
 import Pagination from "./common/pagination";
+import ListGroup from "./common/listGroup";
 import { getRecordsOnPage } from "../util/paginate";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
+    genre: getGenres(),
     tableHeaders: ["Title", "Genre", "No. In Stock", "Daily Rental Rate", " "],
     pageSize: 4,
     currentPage: 1
@@ -34,6 +37,7 @@ class Movies extends Component {
   render() {
     const {
       movies: allMovies,
+      genre,
       currentPage,
       pageSize,
       tableHeaders
@@ -80,21 +84,28 @@ class Movies extends Component {
 
     return (
       <React.Fragment>
-        <span>
+        <div>
           {allMovies.length === 0
             ? "No movies in the database"
             : allMovies.length + " movie/s in the database"}
-        </span>
-        <table className="table table-hover">
-          {getTableHeader}
-          {getTableBody}
-        </table>
-        <Pagination
-          totalNoOfRecords={allMovies.length}
-          pageSize={pageSize}
-          onPageClick={this.handleOnPageClick}
-          currentPage={this.state.currentPage}
-        />
+        </div>
+        <div className="row">
+          <div className="col-3 m-2">
+            <ListGroup listGroupKey="_id" listGroupValue="name" items={genre} />
+          </div>
+          <div className="col">
+            <table className="table table-hover">
+              {getTableHeader}
+              {getTableBody}
+            </table>
+            <Pagination
+              totalNoOfRecords={allMovies.length}
+              pageSize={pageSize}
+              onPageClick={this.handleOnPageClick}
+              currentPage={this.state.currentPage}
+            />
+          </div>
+        </div>
       </React.Fragment>
     );
   }
