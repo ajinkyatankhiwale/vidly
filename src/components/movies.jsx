@@ -15,7 +15,8 @@ class Movies extends Component {
     genre: getGenres(),
     tableHeaders: ["Title", "Genre", "No. In Stock", "Daily Rental Rate", " "],
     pageSize: 4,
-    currentPage: 1
+    currentPage: 1,
+    currentGenre: null
   };
 
   handleDeleteMovie = movie => {
@@ -32,6 +33,11 @@ class Movies extends Component {
 
   handleOnPageClick = page => {
     this.setState({ currentPage: page });
+  };
+
+  handleGenreSelect = genre => {
+    this.setState({ currentGenre: genre });
+    console.log(genre);
   };
 
   render() {
@@ -91,7 +97,13 @@ class Movies extends Component {
         </div>
         <div className="row">
           <div className="col-3 m-2">
-            <ListGroup listGroupKey="_id" listGroupValue="name" items={genre} />
+            <ListGroup
+              listGroupKey="_id"
+              listGroupValue="name"
+              items={genre}
+              onItemSelect={this.handleGenreSelect}
+              currentItem={this.state.currentGenre}
+            />
           </div>
           <div className="col">
             <table className="table table-hover">
