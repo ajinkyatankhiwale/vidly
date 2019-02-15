@@ -4,27 +4,35 @@ import { getMovies } from "../services/fakeMovieService";
 import { getGenres } from "../services/fakeGenreService";
 import "bootstrap/dist/css/bootstrap.css";
 import "font-awesome/css/font-awesome.css";
-import Like from "../components/common/like";
 import Pagination from "./common/pagination";
 import ListGroup from "./common/listGroup";
 import { getRecordsOnPage } from "../util/paginate";
+import MoviesTable from "./moviesTable";
+import _ from "lodash";
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
-    genre: getGenres(),
-    tableHeaders: ["Title", "Genre", "No. In Stock", "Daily Rental Rate", " "],
+    genre: [{ _id: "", name: "All Movies" }, ...getGenres()],
+    tableHeaders: [
+      { key: "title", value: "Title" },
+      { key: "genre.name", value: "Genre" },
+      { key: "numberInStock", value: "No. In Stock" },
+      { key: "dailyRentalRate", value: "Daily Rental Rate" },
+      { key: "", value: "" }
+    ],
     pageSize: 4,
     currentPage: 1,
-    currentGenre: null
+    currentGenre: null,
+    sortedColumn: [{ column: "title", order: "asc" }]
   };
 
-  handleDeleteMovie = movie => {
+  handleMovieDelete = movie => {
     const movies = this.state.movies.filter(m => m._id !== movie._id);
     this.setState({ movies: movies });
   };
 
-  handleClickLike = movie => {
+  handleLikeClick = movie => {
     const movies = [...this.state.movies];
     const index = movies.indexOf(movie);
     movies[index].liked = !movies[index].liked;
@@ -36,8 +44,12 @@ class Movies extends Component {
   };
 
   handleGenreSelect = genre => {
-    this.setState({ currentGenre: genre });
-    console.log(genre);
+    this.setState({ currentGenre: genre, currentPage: 1 });
+  };
+
+  handleColumnSort = column => {
+    console.log(column);
+    this.setState({ sortedColumn: { column, order: "asc" } });
   };
 
   render() {
@@ -45,56 +57,32 @@ class Movies extends Component {
       movies: allMovies,
       genre,
       currentPage,
+      currentGenre,
       pageSize,
-      tableHeaders
+      tableHeaders,
+      sortedColumn
     } = this.state;
 
-    const movies = getRecordsOnPage(allMovies, currentPage, pageSize);
+    const genreMovies =
+      currentGenre && currentGenre._id
+        ? allMovies.filter(movie => movie.genre._id === currentGenre._id)
+        : allMovies;
 
-    const getTableHeader = (
-      <thead>
-        <tr>
-          {tableHeaders.map(tableHeader => (
-            <th key={tableHeader}>{tableHeader}</th>
-          ))}
-        </tr>
-      </thead>
+    const sortedMovies = _.orderBy(
+      genreMovies,
+      [sortedColumn.column],
+      [sortedColumn.order]
     );
 
-    const getTableBody = (
-      <tbody>
-        {movies.map(movie => (
-          <tr key={movie._id}>
-            <td>{movie.title}</td>
-            <td>{movie.genre.name}</td>
-            <td>{movie.numberInStock}</td>
-            <td>{movie.dailyRentalRate}</td>
-            <td>
-              <Like
-                movie={movie}
-                clickLike={() => this.handleClickLike(movie)}
-              />
-            </td>
-            <td>
-              <button
-                onClick={() => this.handleDeleteMovie(movie)}
-                className="btn btn-danger"
-              >
-                Delete
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    );
+    const movies = getRecordsOnPage(sortedMovies, currentPage, pageSize);
 
     return (
       <React.Fragment>
-        <div>
-          {allMovies.length === 0
+        <p>
+          {genreMovies.length === 0
             ? "No movies in the database"
-            : allMovies.length + " movie/s in the database"}
-        </div>
+            : genreMovies.length + " movie/s in the database"}
+        </p>
         <div className="row">
           <div className="col-3 m-2">
             <ListGroup
@@ -106,12 +94,15 @@ class Movies extends Component {
             />
           </div>
           <div className="col">
-            <table className="table table-hover">
-              {getTableHeader}
-              {getTableBody}
-            </table>
+            <MoviesTable
+              movies={movies}
+              tableHeaders={tableHeaders}
+              onLikeClick={this.handleLikeClick}
+              onMovieDelete={this.handleMovieDelete}
+              onColumnSort={this.handleColumnSort}
+            />
             <Pagination
-              totalNoOfRecords={allMovies.length}
+              totalNoOfRecords={genreMovies.length}
               pageSize={pageSize}
               onPageClick={this.handleOnPageClick}
               currentPage={this.state.currentPage}
