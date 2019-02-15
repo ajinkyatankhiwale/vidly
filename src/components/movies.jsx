@@ -12,8 +12,8 @@ import _ from "lodash";
 
 class Movies extends Component {
   state = {
-    movies: getMovies(),
-    genre: [{ _id: "", name: "All Movies" }, ...getGenres()],
+    movies: {},
+    genre: [],
     tableHeaders: [
       { key: "title", value: "Title" },
       { key: "genre.name", value: "Genre" },
@@ -26,6 +26,13 @@ class Movies extends Component {
     currentGenre: null,
     sortedColumn: [{ column: "title", order: "asc" }]
   };
+
+  componentDidMount() {
+    this.setState({
+      movies: getMovies(),
+      genre: [{ _id: "", name: "All Movies" }, ...getGenres()]
+    });
+  }
 
   handleMovieDelete = movie => {
     const movies = this.state.movies.filter(m => m._id !== movie._id);
