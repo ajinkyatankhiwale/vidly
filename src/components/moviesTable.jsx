@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Like from "../components/common/like";
 import TableHeader from "./common/tableHeader";
-import TableBody from "./tableBody";
+import TableBody from "./common/tableBody";
 
 class MoviesTable extends Component {
   render() {
