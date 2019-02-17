@@ -24,7 +24,7 @@ class Movies extends Component {
     pageSize: 4,
     currentPage: 1,
     currentGenre: null,
-    sortedColumn: [{ column: "title", order: "asc" }]
+    sortedColumn: { column: "title", order: "asc" }
   };
 
   componentDidMount() {
@@ -55,8 +55,12 @@ class Movies extends Component {
   };
 
   handleColumnSort = column => {
-    console.log(column);
-    this.setState({ sortedColumn: { column, order: "asc" } });
+    if (column === this.state.sortedColumn.column) {
+      const order = this.state.sortedColumn.order === "asc" ? "desc" : "asc";
+      this.setState({ sortedColumn: { column, order } });
+    } else {
+      this.setState({ sortedColumn: { column, order: "asc" } });
+    }
   };
 
   render() {
