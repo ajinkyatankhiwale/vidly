@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Like from "../components/common/like";
 import TableHeader from "./common/tableHeader";
+import TableBody from "./tableBody";
 
 class MoviesTable extends Component {
   render() {
@@ -27,7 +28,8 @@ class MoviesTable extends Component {
           tableHeaders={tableHeaders}
           onColumnSort={onColumnSort}
         />
-        <tbody>
+        <TableBody data={movies} tableHeaders={tableHeaders} />
+        {/* <tbody>
           {movies.map(movie => (
             <tr key={movie._id}>
               <td>{movie.title}</td>
@@ -47,7 +49,7 @@ class MoviesTable extends Component {
               </td>
             </tr>
           ))}
-        </tbody>
+        </tbody> */}
       </table>
     );
   }
