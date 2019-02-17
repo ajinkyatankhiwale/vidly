@@ -14,13 +14,6 @@ class Movies extends Component {
   state = {
     movies: {},
     genre: [],
-    tableHeaders: [
-      { key: "title", value: "Title" },
-      { key: "genre.name", value: "Genre" },
-      { key: "numberInStock", value: "No. In Stock" },
-      { key: "dailyRentalRate", value: "Daily Rental Rate" },
-      { key: "", value: "" }
-    ],
     pageSize: 4,
     currentPage: 1,
     currentGenre: null,
@@ -54,13 +47,8 @@ class Movies extends Component {
     this.setState({ currentGenre: genre, currentPage: 1 });
   };
 
-  handleColumnSort = column => {
-    if (column === this.state.sortedColumn.column) {
-      const order = this.state.sortedColumn.order === "asc" ? "desc" : "asc";
-      this.setState({ sortedColumn: { column, order } });
-    } else {
-      this.setState({ sortedColumn: { column, order: "asc" } });
-    }
+  handleColumnSort = sortedColumn => {
+    this.setState({ sortedColumn });
   };
 
   render() {
@@ -70,7 +58,6 @@ class Movies extends Component {
       currentPage,
       currentGenre,
       pageSize,
-      tableHeaders,
       sortedColumn
     } = this.state;
 
@@ -107,7 +94,7 @@ class Movies extends Component {
           <div className="col">
             <MoviesTable
               movies={movies}
-              tableHeaders={tableHeaders}
+              sortedColumn={sortedColumn}
               onLikeClick={this.handleLikeClick}
               onMovieDelete={this.handleMovieDelete}
               onColumnSort={this.handleColumnSort}
