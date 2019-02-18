@@ -51,10 +51,9 @@ class Movies extends Component {
     this.setState({ sortedColumn });
   };
 
-  render() {
+  handlePagedData = () => {
     const {
       movies: allMovies,
-      genre,
       currentPage,
       currentGenre,
       pageSize,
@@ -73,6 +72,14 @@ class Movies extends Component {
     );
 
     const movies = getRecordsOnPage(sortedMovies, currentPage, pageSize);
+
+    return { genreMovies, movies };
+  };
+
+  render() {
+    const { genre, pageSize, sortedColumn } = this.state;
+
+    const { genreMovies, movies } = this.handlePagedData();
 
     return (
       <React.Fragment>
