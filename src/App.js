@@ -6,7 +6,7 @@ import Movies from "./components/movies";
 import Customer from "./components/customer";
 import Rentals from "./components/rentals";
 import PageNotFound from "./components/pageNotFound";
-import MovieDetails from "./components/MovieDetails";
+import MovieDetails from "./components/movieDetails";
 
 class App extends Component {
   render() {
