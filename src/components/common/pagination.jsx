@@ -10,20 +10,29 @@ const Pagination = props => {
   if (totalNoOfPages === 1) return null;
 
   return (
-    <nav>
-      <ul className="pagination">
-        {pages.map(page => (
-          <li
-            key={page}
-            className={currentPage === page ? "page-item active" : "page-item"}
-          >
-            <a onClick={() => onPageClick(page)} className="page-link">
-              {page}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <React.Fragment>
+      <nav>
+        <ul className="pagination">
+          {pages.map(page => (
+            <li
+              key={page}
+              className={
+                currentPage === page ? "page-item active" : "page-item"
+              }
+            >
+              <a onClick={() => onPageClick(page)} className="page-link">
+                {page}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <span className="totalNoOfRecords">
+        {totalNoOfRecords === 0
+          ? "No records in the database"
+          : totalNoOfRecords + " records in the database"}
+      </span>
+    </React.Fragment>
   );
 };
 

@@ -34,3 +34,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.totalNoOfRecords {
+  text-align: left;
+}

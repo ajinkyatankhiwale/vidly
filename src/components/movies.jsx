@@ -83,11 +83,6 @@ class Movies extends Component {
 
     return (
       <React.Fragment>
-        <p>
-          {genreMovies.length === 0
-            ? "No movies in the database"
-            : genreMovies.length + " movie/s in the database"}
-        </p>
         <div className="row">
           <div className="col-3 m-2">
             <ListGroup

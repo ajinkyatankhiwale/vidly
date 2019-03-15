@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Like from "../components/common/like";
 
 import Table from "./common/table";
@@ -8,7 +9,11 @@ class MoviesTable extends Component {
     const { movies, sortedColumn, onColumnSort } = this.props;
 
     const tableHeaders = [
-      { key: "title", value: "Title" },
+      {
+        key: "title",
+        value: "Title",
+        content: movie => <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      },
       { key: "genre.name", value: "Genre" },
       { key: "numberInStock", value: "No. In Stock" },
       { key: "dailyRentalRate", value: "Daily Rental Rate" },
