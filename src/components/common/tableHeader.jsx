@@ -17,9 +17,9 @@ class TableHeader extends Component {
     const sortedColumn = { ...this.props.sortedColumn };
     if (column.key !== sortedColumn.column) return null;
     return sortedColumn.order === "asc" ? (
-      <i class="fa fa-sort-asc" aria-hidden="true" />
+      <i className="fa fa-sort-asc" aria-hidden="true" />
     ) : (
-      <i class="fa fa-sort-desc" aria-hidden="true" />
+      <i className="fa fa-sort-desc" aria-hidden="true" />
     );
   };
 
