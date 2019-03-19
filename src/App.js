@@ -8,6 +8,7 @@ import Rentals from "./components/rentals";
 import PageNotFound from "./components/pageNotFound";
 import MovieDetails from "./components/movieDetails";
 import LoginFrom from "./components/loginForm";
+import RegisterForm from "./components/registerForm";
 
 import "./App.css";
 
@@ -24,6 +25,7 @@ class App extends Component {
               <Route path="/movies" component={Movies} />
               <Route path="/customer" component={Customer} />
               <Route path="/rentals" component={Rentals} />
+              <Route path="/register" component={RegisterForm} />
               <Route path="/pageNotFound" component={PageNotFound} />
               <Route path="/" exact />
               <Redirect to="/pageNotFound" />
